@@ -1,0 +1,23 @@
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #2F80ED;
+    padding: 1rem;
+  }
+  
+  .navbar__item {
+    margin-right: 1rem;
+  }
+  
+  .tekst {
+    color: white; 
+    text-decoration:solid;
+    
+  }
+  
+  .registrer {
+    display: flex;
+    justify-content: space-between;
+  }
+  
