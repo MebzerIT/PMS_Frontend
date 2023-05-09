@@ -4,6 +4,8 @@ import HjemmesideView from './Views/HjemmesideView';
 import NavBar from './components/NavBar/NavBar';
 import GjøremålslisteView from './Views/GjøremålslisteView';
 import ProfilView from './Views/ProfilView';
+import LagprosjektView from './Views/LagprosjektView';
+import MittprosjektView from './Views/MittprosjektView';
 function App() {
   return (
     <BrowserRouter>
@@ -12,6 +14,8 @@ function App() {
             { <Routes>
               <Route path="/" element={ <HjemmesideView />}/>
               <Route path="/Gjøremålsliste" element={ <GjøremålslisteView />}/>
+              <Route path="/MittProsjekt" element={ <MittprosjektView />}/>
+              <Route path="/Lagprosjekt" element={ <LagprosjektView />}/>
               <Route path="/Profil" element={ <ProfilView />}/>
             </Routes> }
         </div>

@@ -1,28 +1,49 @@
 import keycloak from "../keycloak/keycloak";
-import {NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import "./NavBar.css"; 
 
 const NavBar = () => {
   const navigate = useNavigate();
 
   return (
-    <>
-      <div>
-        <NavLink to="/">Hjem</NavLink>
+    <nav className="navbar"> 
+      <div className="navbar__item">
       </div>
-     {keycloak.authenticated && (
-      <div>
-        <NavLink to="/Gjøremålsliste">Gjøremålsliste</NavLink>
-      </div>
-        )}
+      <NavLink className="tekst" to="/">
+            <img
+              src="/images/projectlogo.png"
+              alt="logo"
+              style={{ width: '50px', height: '40px' }}
+            />
+          </NavLink>
+      {keycloak.authenticated && (
+        <div className="navbar__item">
+          <NavLink className="tekst" to="/Gjøremålsliste">Gjøremålsliste</NavLink>
+        </div>
+      )}
 
-        {keycloak.authenticated && (
-      <div>
-        <NavLink to="/Profil">Profil</NavLink>
-      </div>
-        )}
+      {keycloak.authenticated && (
+        <div className="navbar__item">
+          <NavLink className="tekst" to="/MittProsjekt">Mitt Prosjekt</NavLink>
+        </div>
+      )}
+
+      {keycloak.authenticated && (
+        <div className="navbar__item">
+          <NavLink className="tekst" to="/Lagprosjekt">Lag prosjekt</NavLink>
+        </div>
+      )}
+
+      {keycloak.authenticated && (
+        <div className="navbar__item">
+          <NavLink className="tekst" to="/Profil"> Profil</NavLink>
+        </div>
+      )}
 
       {keycloak.authenticated && (
         <button
+          className="navbar__item"
           onClick={() => {
             keycloak.logout();
             navigate("/");
@@ -31,11 +52,24 @@ const NavBar = () => {
           Logg ut
         </button>
       )}
-    </>
+      <div className="registrer">
+    {!keycloak.authenticated && (
+        <>
+                   <button
+                     
+                       onClick={() => keycloak.login()}
+                                                          >
+                       LOGG INN
+                    </button>
+
+                    <button
+                       onClick={() => keycloak.register()}
+                      >
+                      NY BRUKER
+                      </button>
+                  </>)}</div>
+    </nav>
   );
 };
 
 export default NavBar;
-
-
-
