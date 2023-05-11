@@ -10,7 +10,7 @@ export const getUser = async (userId) => {
       }
       const user = await response.json();
       return user;
-    } catch (error) {
+    } catch (error) {   
      
       return false;
     }
@@ -25,7 +25,7 @@ export const getUser = async (userId) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
+        body: JSON.stringify({  
         
           id: keycloak.tokenParsed.sub,
           f_name: keycloak.tokenParsed.given_name,
