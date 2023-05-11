@@ -25,7 +25,7 @@ const Profil = () => {
 
       const fetchedUser = await response.json();
       setUser(fetchedUser);
-      setFirstName(fetchedUser.f_name); 
+      setFirstName(fetchedUser.f_name);
       setLastName(fetchedUser.l_name);
       setEmail(fetchedUser.email);
     } catch (error) {
