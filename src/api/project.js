@@ -22,4 +22,19 @@ const addProject = async (project) => {
     }
   };
 
-  export {addProject, getProjects, apiUrl}
+  const updateProject = async (id, updatedProject) => {
+    try {
+      const response = await fetch(`${apiUrl}/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedProject),
+      });
+      return response;
+    } catch (error) {
+      throw new Error(`Error updating project: ${error.message}`);
+    }
+  };
+  
+  export {addProject, getProjects, updateProject, apiUrl};
