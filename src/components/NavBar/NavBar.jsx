@@ -3,6 +3,8 @@ import { NavLink, useNavigate } from "react-router-dom";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AddProjectIcon from '@mui/icons-material/Add';
 import AutoAwesomeMotionIcon from '@mui/icons-material/AutoAwesomeMotion';
+import SearchIcon from '@mui/icons-material/Search';
+import ForumIcon from '@mui/icons-material/Forum';
 import ListIcon from '@mui/icons-material/List';
 import { ListItemIcon } from '@mui/material';
 
@@ -42,6 +44,28 @@ const NavBar = () => {
                 <AutoAwesomeMotionIcon/>
             </ListItemIcon>
             Mitt Prosjekt
+          </NavLink>
+        </div>
+      )}
+
+      {keycloak.authenticated && (
+        <div className="navbar__item">
+          <NavLink className="tekst" to="/Medlemmer">
+            <ListItemIcon>
+               <SearchIcon/> 
+            </ListItemIcon>
+            Medlemmer
+          </NavLink>
+        </div>
+      )}
+
+      {keycloak.authenticated && (
+        <div className="navbar__item">
+          <NavLink className="tekst" to="/Chat">
+            <ListItemIcon>
+                <ForumIcon/>
+            </ListItemIcon>
+            Chat
           </NavLink>
         </div>
       )}

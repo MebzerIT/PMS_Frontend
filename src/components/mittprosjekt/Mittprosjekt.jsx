@@ -80,7 +80,7 @@ function Mittproject() {
         return event.tooltip;
     }
 
-    function eventStyleGetter(event, start, end, isSelected) {
+    function eventStyleGetter(event) {
         return {
             style: {
                 backgroundColor: event.phaseColor,
@@ -95,10 +95,10 @@ function Mittproject() {
 
     function getPhaseColor(phase) {
         switch (phase) {
-            case 'analyse':
+            case 'Analyse':
                 return '#f44336';
-            case 'design':
-                return '#9c27b0';
+            case 'Design':
+                return '#940b99';
             case 'Implementering':
                 return '#2196f3';
             case 'Testing':
@@ -129,42 +129,54 @@ function Mittproject() {
                 <table>
                     <thead>
                         <tr>
-                            <th>Prosjekt</th>
+                            <th>Prosjektnavn</th>
+                            <th>Beskrivelse</th>
                             <th>Type</th>
-                            <th>Fase</th>
                             <th>Startdato</th>
                             <th>Frist</th>
-                            <th>Gjenværende dager</th>
-                            <th>Fremgang</th> 
+                            <th>Fremgang</th>
+                            <th>Dager igjen</th>
                         </tr>
                     </thead>
                     <tbody>
                         {projects.map((project) => (
-                            <tr key={project.id}>
-                                <td>{project.title}</td>
-                                <td>{project.type}</td>
-                                <td>{project.phase}</td>
-                                <td>{formatDate(project.startDate)}</td>
-                                <td>{formatDate(project.dueDate)}</td>
-                                <td>{daysRemaining(project.dueDate)}</td>
-                                <td>
-                                    <div className="progress-bar">
-                                        <div
-                                            className="progress-bar-fill"
-                                            style={{
-                                                backgroundColor: getPhaseColor(project.phase),
-                                                width: `${getProgress(project.phase)}%`,
-                                            }}
-                                        ></div>
-                                    </div>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
+                    <tr key={project.id}>
+                    <td>{project.title}</td>
+                    <td>{project.description}</td>
+                    <td>{project.type}</td>
+                    <td>{formatDate(project.startDate)}</td>
+                    <td>{formatDate(project.dueDate)}</td>
+                
+                    <td>
+                    <div className="progress">
+                    <div
+                    className="progress-bar"
+                    role="progressbar"
+                    style={{
+                        width: `${getProgress(project.phase)}%`,
 
-                </table>
-            </div>
+                    backgroundColor: getPhaseColor(
+                    project.phase
+                    ),
+                    }}
+                    aria-valuenow={getProgress(
+                    project.phase
+                    )}
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                    >
+                    {getProgress(project.phase)}%
+                    </div>
+                    </div>
+                    </td>
+                    <td>{daysRemaining(project.dueDate)}</td>
+                    </tr>
+                    ))}
+                </tbody>
+            </table>
         </div>
-    );
+                    </div >
+                    );
 }
+
 export default withAuth(Mittproject);
