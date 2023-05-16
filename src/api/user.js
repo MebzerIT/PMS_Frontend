@@ -28,9 +28,9 @@ export const getUser = async (userId) => {
         body: JSON.stringify({  
         
           id: keycloak.tokenParsed.sub,
-          f_name: keycloak.tokenParsed.given_name,
-          l_name: keycloak.tokenParsed.family_name,
-          
+          firstName: keycloak.tokenParsed.given_name,
+          lastName: keycloak.tokenParsed.family_name,
+          email: keycloak.tokenParsed.email
         }),
       });
       return response;
