@@ -15,6 +15,7 @@ const addtodos = async (todos) => {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(todos),
+            
         });
         return response;
     } catch (error) {

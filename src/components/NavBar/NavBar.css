@@ -1,23 +1,86 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background-color: #2F80ED;
+}
+
+.navbar__item {
+  display: inline-block;
+  margin-right: 1rem;
+  color: white;
+}
+
+.navbar__item:last-child {
+  margin-right: 0;
+}
+
+.tekst {
+  color: white;
+}
+
+.navbar__item:hover {
+  text-decoration: underline;
+}
+
+.logout-button {
+  background-color: #2F80ED;
+  color: white;
+  border: none;
+  padding: 0.5rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.logout-button:hover {
+  background-color: white;
+  color: #2F80ED;
+}
+
+.navbar__item button {
+  background-color: #fff;
+  color: #2F80ED;
+  border: none;
+  padding: 0.5rem;
+  margin-right: 1rem;
+  cursor: pointer;
+}
+
+.navbar__item button:hover {
+  background-color: #2F80ED;
+  color: #fff;
+}
+
+.registrer button {
+  background-color: #2F80ED;
+  color: #fff;
+  border: none;
+  padding: 0.5rem;
+  margin-right: 1rem;
+  cursor: pointer;
+}
+
+.registrer button:hover {
+  background-color: #fff;
+  color: #2F80ED;
+}
+
+
+@media screen and (max-width: 768px) {
   .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #2F80ED;
-    padding: 1rem;
+    flex-direction: column;
+    align-items: flex-start;
   }
-  
+
   .navbar__item {
-    margin-right: 1rem;
+    display: block;
+    margin: 0.5rem 0;
   }
-  
-  .tekst {
-    color: white; 
-    text-decoration:solid;
-    
+
+  .navbar__item.active {
+    text-decoration: underline;
   }
-  
-  .registrer {
-    display: flex;
-    justify-content: space-between;
-  }
-  
+}

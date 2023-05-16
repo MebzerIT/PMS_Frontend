@@ -25,11 +25,11 @@ const Profil = () => {
 
       const fetchedUser = await response.json();
       setUser(fetchedUser);
-      setFirstName(fetchedUser.f_name);
-      setLastName(fetchedUser.l_name);
+      setFirstName(fetchedUser.firstName);
+      setLastName(fetchedUser.lastName);
       setEmail(fetchedUser.email);
     } catch (error) {
-      // Handle error
+      // Handle error 
     }
   }, []);
 
@@ -42,9 +42,9 @@ const Profil = () => {
     const value = target.value;
     const name = target.name;
 
-    if (name === 'f_name') {
+    if (name === 'firstName') {
       setFirstName(value);
-    } else if (name === 'l_name') {
+    } else if (name === 'lastName') {
       setLastName(value);
     } else if (name === 'email') {
       setEmail(value);
@@ -62,8 +62,8 @@ const Profil = () => {
         },
         body: JSON.stringify({
           id: keycloak.tokenParsed.sub,
-          f_name: firstName,
-          l_name: lastName,
+          firstName: firstName,
+          lastName: lastName,
           email: email
         })
       });
@@ -85,11 +85,11 @@ const Profil = () => {
         <form onSubmit={handleFormSubmit}>
           <div>
             <label htmlFor="firstName">Fornavn:</label>
-            <input type="text" name="f_name" id="firstName" value={firstName} onChange={handleInputChange} />
+            <input type="text" name="firstName" id="firstName" value={firstName} onChange={handleInputChange} />
           </div>
           <div>
             <label htmlFor="lastName">Etternavn:</label>
-            <input type="text" name="l_name" id="lastName" value={lastName} onChange={handleInputChange} />
+            <input type="text" name="lastName" id="lastName" value={lastName} onChange={handleInputChange} />
           </div>
           <div>
             <label htmlFor="email">Email:</label>

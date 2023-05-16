@@ -8,6 +8,7 @@ const Gjøremålsliste = () => {
     const [todos, setTodos] = useState({
         title: "",
         category: "",
+        priorityLvl: "",
         date: "",
     });
     const [todoList, setTodoList] = useState([]);
@@ -82,7 +83,7 @@ const Gjøremålsliste = () => {
 
 
                 <Button variant="contained" color="primary" type="submit">
-                    Lagre prosjekt
+                    Lagre gjøremål
                 </Button>
             </form>
 

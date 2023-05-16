@@ -34,44 +34,43 @@ label.MuiInputLabel-root {
     left: 10px;
     padding: 0 5px;
     background-color: white;
-}
-
-.MuiTextField-root {
+  }
+  
+  .MuiTextField-root {
     padding-top: 20px;
-}
-
+  }
+  
 
 .todo-container {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
-    /* add this to center items horizontally */
-}
-
-.todo {
+    justify-content: center; /* add this to center items horizontally */
+  }
+  
+  .todo {
     background-color: #ffeb3b;
     padding: 20px;
     margin: 10px;
     border-radius: 10px;
     box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1);
     width: 30%;
-}
+  }
 
-.todo.jobb {
+  .todo.jobb {
     background-color: #FFFF99;
     color: black;
-}
-
-.todo.privat {
-    background-color: #ff7eb9;
+  }
+  
+  .todo.privat {
+    background-color: 	#ff7eb9;
     color: black;
-}
-
-.todo.annet {
-    background-color: #fff2ea;
+  }
+  
+  .todo.annet {
+    background-color: 	#fff2ea;
     color: black;
-}
-
+  }
+  
 .todo h3 {
     font-size: 1.2rem;
     margin-bottom: 5px;
@@ -86,3 +85,4 @@ label.MuiInputLabel-root {
     background-color: #f6dd94;
     cursor: pointer;
 }
+  

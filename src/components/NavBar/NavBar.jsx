@@ -6,17 +6,34 @@ import AutoAwesomeMotionIcon from '@mui/icons-material/AutoAwesomeMotion';
 import SearchIcon from '@mui/icons-material/Search';
 import ForumIcon from '@mui/icons-material/Forum';
 import ListIcon from '@mui/icons-material/List';
+import LogoutIcon from '@mui/icons-material/Logout';
 import { ListItemIcon } from '@mui/material';
+import { addUsers, getUser } from "../../api/user";
 
-
-import "./NavBar.css"; 
+import "./NavBar.css";
 
 const NavBar = () => {
   const navigate = useNavigate();
 
-  
+  if (keycloak.authenticated) {
+    getUser(keycloak.tokenParsed.sub)
+      .then(result => {
+        console.log(result)
+        if (!result) {
+          console.log("POST")
+          addUsers();
+          window.location.reload();
+        } else {
+          // do nothing
+          console.log("User exists, NO POST")
+        }
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }
   return (
-    <nav className="navbar"> 
+    <nav className="navbar">
       <div className="navbar__item">
       </div>
       <NavLink className="tekst" to="/">
@@ -30,9 +47,9 @@ const NavBar = () => {
         <div className="navbar__item">
           <NavLink className="tekst" to="/Gjøremålsliste">
             <ListItemIcon>
-            <ListIcon/>
+              <ListIcon />
+              Gjøremålsliste
             </ListItemIcon>
-            Gjøremålsliste
           </NavLink>
         </div>
       )}
@@ -41,9 +58,9 @@ const NavBar = () => {
         <div className="navbar__item">
           <NavLink className="tekst" to="/MittProsjekt">
             <ListItemIcon>
-                <AutoAwesomeMotionIcon/>
+              <AutoAwesomeMotionIcon />
+              Mitt Prosjekt
             </ListItemIcon>
-            Mitt Prosjekt
           </NavLink>
         </div>
       )}
@@ -52,9 +69,9 @@ const NavBar = () => {
         <div className="navbar__item">
           <NavLink className="tekst" to="/Medlemmer">
             <ListItemIcon>
-               <SearchIcon/> 
+              <SearchIcon />
+              Medlemmer
             </ListItemIcon>
-            Medlemmer
           </NavLink>
         </div>
       )}
@@ -63,9 +80,9 @@ const NavBar = () => {
         <div className="navbar__item">
           <NavLink className="tekst" to="/Chat">
             <ListItemIcon>
-                <ForumIcon/>
+              <ForumIcon />
+              Chat
             </ListItemIcon>
-            Chat
           </NavLink>
         </div>
       )}
@@ -75,8 +92,8 @@ const NavBar = () => {
           <NavLink className="tekst" to="/Lagprosjekt">
             <ListItemIcon>
               <AddProjectIcon />
+              Lag prosjekt
             </ListItemIcon>
-            Lag prosjekt
           </NavLink>
         </div>
       )}
@@ -85,23 +102,27 @@ const NavBar = () => {
         <div className="navbar__item">
           <NavLink className="tekst" to="/Profil">
             <ListItemIcon>
-              <AccountCircleIcon/>
+              <AccountCircleIcon />
+              Profil
             </ListItemIcon>
-            Profil
           </NavLink>
         </div>
       )}
 
       {keycloak.authenticated && (
         <button
-          className="navbar__item"
+          className="navbar__item logout-button"
           onClick={() => {
             keycloak.logout();
             navigate("/");
           }}
         >
-          Logg ut
+          <ListItemIcon>
+            <LogoutIcon />
+            Logg ut
+          </ListItemIcon>
         </button>
+
       )}
       <div className="registrer">
         {!keycloak.authenticated && (
@@ -109,13 +130,13 @@ const NavBar = () => {
             <button
               onClick={() => keycloak.login()}
             >
-              LOGG INN
+              Logg inn
             </button>
 
             <button
               onClick={() => keycloak.register()}
             >
-              NY BRUKER
+              Ny bruker
             </button>
           </>
         )}
