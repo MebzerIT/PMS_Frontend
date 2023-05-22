@@ -3,6 +3,7 @@ import { useEffect, useState, useCallback } from 'react';
 import keycloak from "../keycloak/keycloak";
 import { apiUrl } from "../../api/user";
 
+import "./Profil.css";
 
 const Profil = () => {
   const [user, setUser] = useState(null);
@@ -29,7 +30,7 @@ const Profil = () => {
       setLastName(fetchedUser.lastName);
       setEmail(fetchedUser.email);
     } catch (error) {
-      // Handle error 
+      // Handle error
     }
   }, []);
 

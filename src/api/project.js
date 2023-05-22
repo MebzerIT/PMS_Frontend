@@ -36,5 +36,20 @@ const addProject = async (project) => {
       throw new Error(`Error updating project: ${error.message}`);
     }
   };
+
+  export function deleteProject(projectId) {
+    return fetch(`/api/projects/${projectId}`, {
+      method: 'DELETE',
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Failed to delete project');
+        }
+      })
+      .catch((error) => {
+        console.error('Error deleting project:', error);
+      });
+  }
   
-  export {addProject, getProjects, updateProject, apiUrl};
+  
+  export {addProject, getProjects, updateProject,  apiUrl};

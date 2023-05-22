@@ -17,8 +17,9 @@
   
   .mittprosjekt-calendar {
     width: 100%;
-    max-width: 800px;
+    max-width: 8000px;
     margin-bottom: 2rem;
+    height: 100%;
   }
   
   .mittprosjekt-table {

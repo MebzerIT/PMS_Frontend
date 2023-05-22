@@ -1,6 +1,8 @@
+import Mittprosjekt from "../mittprosjekt/Mittprosjekt";
+
 const Hjemmeside = () => (
     <>
-    <h1>PMS</h1>
+    <Mittprosjekt></Mittprosjekt>
     </>
 )
 export default Hjemmeside;

@@ -85,4 +85,31 @@ label.MuiInputLabel-root {
     background-color: #f6dd94;
     cursor: pointer;
 }
-  
+
+.priority-container {
+  margin: 20px 0;
+}
+
+.priority-label {
+  width: 500px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.priority-0 {
+  color: green;
+}
+
+.priority-1 {
+  color: orange;
+}
+
+.priority-2 {
+  color: red;
+}
+
+.priority {
+  text-align: center;
+  margin-top: 10px;
+}
