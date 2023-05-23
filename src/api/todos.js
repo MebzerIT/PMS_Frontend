@@ -1,3 +1,4 @@
+import axios from 'axios';
 const apiUrl = "http://localhost:8080/api/v1/todos"
 
 async function getTodos() {
@@ -9,16 +10,19 @@ async function getTodos() {
 
 const addtodos = async (todos) => {
     try {
-        const response = await fetch(apiUrl, {
-            method: "POST",
+        const response = await axios.post("http://localhost:8080/api/v1/todos",JSON.stringify(todos) ,{
+
             headers: {
                 "Content-Type": "application/json",
-            },
-            body: JSON.stringify(todos),
+              },
             
         });
+        if (response.status === 404){
+            console.log("failed")
+        }
         return response;
     } catch (error) {
+        console.log("ERROR")
         throw new Error(`Error adding ToDo list: ${error.message}`);
     }
 };

@@ -3,6 +3,7 @@ import { useEffect, useState, useCallback } from 'react';
 import keycloak from "../keycloak/keycloak";
 import { apiUrl } from "../../api/user";
 
+import "./Profil.css";
 
 const Profil = () => {
   const [user, setUser] = useState(null);
@@ -16,7 +17,7 @@ const Profil = () => {
       await keycloak.updateToken(5);
       const userId = keycloak.tokenParsed.sub;
 
-      // Fetch user data with token in Authorization header
+      // Fetch user data with token in Authorization header 
       const response = await fetch(`${apiUrl}/${userId}`);
 
       if (!response.ok) {
@@ -29,7 +30,7 @@ const Profil = () => {
       setLastName(fetchedUser.lastName);
       setEmail(fetchedUser.email);
     } catch (error) {
-      // Handle error 
+      // Handle error
     }
   }, []);
 
