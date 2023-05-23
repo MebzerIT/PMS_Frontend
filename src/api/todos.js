@@ -19,6 +19,7 @@ const addtodos = async (todos) => {
         });
         return response;
     } catch (error) {
+        console.log("ERROR")
         throw new Error(`Error adding ToDo list: ${error.message}`);
     }
 };

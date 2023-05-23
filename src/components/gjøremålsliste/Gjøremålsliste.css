@@ -16,7 +16,7 @@
 }
 
 .form-container .MuiFormControl-root {
-    width: 40%;
+    width: 20%;
 }
 
 .form-container .MuiFormControl-marginNormal {
@@ -44,7 +44,8 @@ label.MuiInputLabel-root {
 .todo-container {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center; /* add this to center items horizontally */
+    justify-content: center; 
+   
   }
   
   .todo {
@@ -87,7 +88,8 @@ label.MuiInputLabel-root {
 }
 
 .priority-container {
-  margin: 20px 0;
+  margin: 10px 0;
+  width: 300px;
 }
 
 .priority-label {

@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import withAuth from "../../hoc/withAuth";
 import { addProject } from "../../api/project";
 import "./Lagprosjekt.css";
 import keycloak from "../keycloak/keycloak";
+
+const apiUrlProjects = "http://localhost:8080/api/v1/projects";
+const apiUrlUsers = "http://localhost:8080/api/v1/users";
 
 const Lagprosjekt = () => {
   const [project, setProject] = useState({
@@ -14,12 +17,29 @@ const Lagprosjekt = () => {
     phase: "Analyse",
   });
 
+  const [users, setUsers] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedUsers, setSelectedUsers] = useState([]);
+
+  useEffect(() => {
+    getUsers();
+  }, []);
+
+  const getUsers = async () => {
+    try {
+      const response = await fetch(apiUrlUsers);
+      const data = await response.json();
+      setUsers(data);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const userId = keycloak.tokenParsed.sub; // Extract the user ID from the Keycloak token
-      const response = await addProject({ ...project, users: [userId] });
+      const userIds = selectedUsers.map((user) => user.id);
+      const response = await addProject({ ...project, users: userIds });
       console.log(response);
       alert("Project added successfully!");
     } catch (error) {
@@ -28,7 +48,6 @@ const Lagprosjekt = () => {
     }
   };
 
-
   const handleChange = (event) => {
     const { name, value } = event.target;
     setProject((prevState) => ({
@@ -36,6 +55,28 @@ const Lagprosjekt = () => {
       [name]: value,
     }));
   };
+
+  const handleUserSearch = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const handleUserSelect = (user) => {
+    setSelectedUsers((prevUsers) => [...prevUsers, user]);
+  };
+
+  const handleUserRemove = (user) => {
+    setSelectedUsers((prevUsers) =>
+      prevUsers.filter((prevUser) => prevUser.id !== user.id)
+    );
+  };
+
+  const filteredUsers = users.filter(
+    (user) =>
+      (user.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        user.lastName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        user.email.toLowerCase().includes(searchQuery.toLowerCase())) &&
+      !selectedUsers.some((selectedUser) => selectedUser.id === user.id)
+  );
 
   return (
     <div className="input-card">
@@ -98,7 +139,7 @@ const Lagprosjekt = () => {
           value={project.phase}
           onChange={handleChange}
           className="form-control"
-          required // Add the required attribute
+          required
         >
           <option value="Analyse">Analyse</option>
           <option value="Design">Design</option>
@@ -107,6 +148,33 @@ const Lagprosjekt = () => {
           <option value="Vedlikehold">Vedlikehold</option>
         </select>
 
+        <label htmlFor="userSearch">Søk etter bruker:</label>
+        <input
+          type="text"
+          name="userSearch"
+          value={searchQuery}
+          onChange={handleUserSearch}
+          className="form-control"
+        />
+
+        <div className="user-list">
+          {filteredUsers.map((user) => (
+            <div key={user.id}>
+              {user.firstName} {user.lastName} - {user.email}
+              <button onClick={() => handleUserSelect(user)}>Add</button>
+            </div>
+          ))}
+        </div>
+
+        <div className="selected-users">
+          <h3>Valgt brukere:</h3>
+          {selectedUsers.map((user) => (
+            <div key={user.id}>
+              {user.firstName} {user.lastName} - {user.email}
+              <button onClick={() => handleUserRemove(user)}>Remove</button>
+            </div>
+          ))}
+        </div>
 
         <input
           type="submit"
