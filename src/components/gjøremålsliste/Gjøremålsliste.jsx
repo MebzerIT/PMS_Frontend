@@ -174,7 +174,7 @@ const Gjøremålsliste = () => {
               </h3>
               <p>Kategori: {todo.category}</p>
               <p>Tidsfrist: {countdown} igjen</p>
-              <div>
+              <div className="button-container">
                 <Button variant="outlined" color="primary" onClick={() => handleEdit(todo)}>
                   Rediger
                 </Button>
