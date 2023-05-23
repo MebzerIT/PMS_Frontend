@@ -1,8 +1,15 @@
 import axios from 'axios';
 const apiUrl = "http://localhost:8080/api/v1/todos"
+const userApiUrl = "http://localhost:8080/api/v1/users"
 
 async function getTodos() {
     const response = await fetch(apiUrl);
+    const data = await response.json();
+    return data;
+}
+
+const getToDoById = async (id) => {
+    const response = await fetch(`${userApiUrl}/${id}/getToDoList`);
     const data = await response.json();
     return data;
 }
@@ -53,5 +60,4 @@ const deletetodos = async (id) => {
     }
 };
 
-export { addtodos, getTodos, updatetodos, deletetodos, apiUrl };
-
+export { addtodos, getTodos, updatetodos, deletetodos, getToDoById,apiUrl };
