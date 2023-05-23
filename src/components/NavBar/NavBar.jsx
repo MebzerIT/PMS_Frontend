@@ -16,6 +16,7 @@ const NavBar = () => {
   const navigate = useNavigate();
 
   if (keycloak.authenticated) {
+    console.log(keycloak.tokenParsed.sub)
     getUser(keycloak.tokenParsed.sub)
       .then(result => {
         console.log(result)

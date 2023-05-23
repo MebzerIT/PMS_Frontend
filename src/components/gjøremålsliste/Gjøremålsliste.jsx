@@ -7,7 +7,6 @@ import keycloak from "../keycloak/keycloak";
 
 const Gjøremålsliste = () => {
   const [todos, setTodos] = useState({
-    // id: "",
     title: "",
     category: "",
     priorityLvl: "",
@@ -40,10 +39,13 @@ const Gjøremålsliste = () => {
   };
 
   const handlePriorityChange = (event, value) => {
+    
     setTodos((prevState) => ({
       ...prevState,
       priorityLvl: value,
-    }));
+      
+    }))
+    console.log(value);
   };
 
   const handleEdit = (todo) => {
@@ -69,12 +71,11 @@ const Gjøremålsliste = () => {
         await updatetodos(todos.id, todos);
         alert("Todo list updated successfully!");
       } else {
-        await addtodos(todos);
         console.log(todos)
+        await addtodos(todos);
         alert("Todo list added successfully!");
       }
       setTodos({
-        // id: "",
         title: "",
         category: "",
         priorityLvl: 1,

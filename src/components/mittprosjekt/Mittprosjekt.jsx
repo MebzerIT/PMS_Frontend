@@ -8,6 +8,7 @@ import { getProjects, updateProject, deleteProject } from '../../api/project';
 import { getUser } from '../../api/user';
 import withAuth from '../../hoc/withAuth';
 import './Mittprosjekt.css';
+import keycloak from '../keycloak/keycloak';
 
 function Mittproject() {
   const [projects, setProjects] = useState([]);
@@ -16,7 +17,7 @@ function Mittproject() {
 
   useEffect(() => {
     async function fetchData() {
-      const userData = await getUser();
+      const userData = await getUser(keycloak.tokenParsed.sub);
       setUser(userData);
 
       if (userData) {
