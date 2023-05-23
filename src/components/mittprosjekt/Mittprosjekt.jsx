@@ -21,6 +21,9 @@ function Mittproject() {
       setUser(userData);
 
       if (userData) {
+        console.log("LOOK HERE")
+        console.log(userData)
+        console.log(userData.id)
         const userProjects = await getProjects(userData.id);
         setProjects(userProjects);
       }
@@ -123,7 +126,8 @@ function Mittproject() {
 
   function handleSaveProject(updatedProject) {
     const projectId = parseInt(updatedProject.id);
-
+    console.log("HERE")
+    console.log(updatedProject)
     updateProject(projectId, updatedProject)
       .then((response) => {
         console.log('Project updated successfully');

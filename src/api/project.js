@@ -1,7 +1,8 @@
-const apiUrl = "http://localhost:8080/api/v1/projects"
+const apiUrl = "http://localhost:8080/api/v1/project"
+const userApiUrl = "http://localhost:8080/api/v1/users"
 
-async function getProjects() {
-    const response = await fetch(apiUrl);
+const getProjects = async (id) => {
+    const response = await fetch(`${userApiUrl}/${id}/getAllProjects`);
     const data = await response.json();
     return data;
   }
@@ -37,8 +38,8 @@ const addProject = async (project) => {
     }
   };
 
-  export function deleteProject(projectId) {
-    return fetch(`/api/projects/${projectId}`, {
+  export const deleteProject = async (projectId) => {
+    return fetch(`${apiUrl}/${projectId}`, {
       method: 'DELETE',
     })
       .then((response) => {

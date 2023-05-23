@@ -3,6 +3,7 @@ import withAuth from "../../hoc/withAuth";
 import { addProject } from "../../api/project";
 import "./Lagprosjekt.css";
 import keycloak from "../keycloak/keycloak";
+import axios from "axios";
 
 const apiUrlProjects = "http://localhost:8080/api/v1/projects";
 const apiUrlUsers = "http://localhost:8080/api/v1/users";
@@ -23,6 +24,13 @@ const Lagprosjekt = () => {
 
   useEffect(() => {
     getUsers();
+    axios.get(`${apiUrlUsers}/${keycloak.tokenParsed.sub}`)
+    .then(response => {
+      setSelectedUsers((prevUsers) => [ response.data])
+    })
+    .catch(error => {
+      console.log(error)
+    })
   }, []);
 
   const getUsers = async () => {
@@ -50,6 +58,7 @@ const Lagprosjekt = () => {
 
   const handleChange = (event) => {
     const { name, value } = event.target;
+    console.log(name,value)
     setProject((prevState) => ({
       ...prevState,
       [name]: value,
