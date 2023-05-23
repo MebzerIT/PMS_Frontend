@@ -6,6 +6,7 @@ import RedigerProsjekt from '../rediger/RedigerProsjekt';
 import { getProjects, updateProject, deleteProject } from '../../api/project';
 import { getUser } from '../../api/user';
 import withAuth from '../../hoc/withAuth';
+import keycloak from '../keycloak/keycloak';
 
 function Hjemmeside() {
   const [projects, setProjects] = useState([]);
@@ -14,7 +15,7 @@ function Hjemmeside() {
 
   useEffect(() => {
     async function fetchData() {
-      const userData = await getUser();
+      const userData = await getUser(keycloak.tokenParsed.sub);
       setUser(userData);
 
       if (userData) {

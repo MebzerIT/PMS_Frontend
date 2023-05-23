@@ -30,7 +30,7 @@ function Mittproject() {
     }
 
     fetchData();
-  }, []);
+  }, [selectedProject]);
 
   function getProgress(phase) {
     switch (phase) {
