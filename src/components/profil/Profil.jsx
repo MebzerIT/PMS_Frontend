@@ -17,7 +17,7 @@ const Profil = () => {
       await keycloak.updateToken(5);
       const userId = keycloak.tokenParsed.sub;
 
-      // Fetch user data with token in Authorization header
+      // Fetch user data with token in Authorization header 
       const response = await fetch(`${apiUrl}/${userId}`);
 
       if (!response.ok) {
