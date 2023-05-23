@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { addtodos, getTodos, updatetodos, deletetodos } from "../../api/todos";
+import { addtodos, getTodos, updatetodos, deletetodos, getToDoById } from "../../api/todos";
 import withAuth from "../../hoc/withAuth";
 import { Button, TextField, Select, MenuItem, FormControl, InputLabel, Slider } from "@mui/material";
 import "./Gjøremålsliste.css";
@@ -18,7 +18,8 @@ const Gjøremålsliste = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getTodos();
+      const data = await getToDoById(keycloak.tokenParsed.sub);
+      console.log("DATA, " ,data)
       setTodoList(data);
       sortTodoList(data);
     };
@@ -55,7 +56,7 @@ const Gjøremålsliste = () => {
   const handleDelete = async (id) => {
     try {
       await deletetodos(id);
-      const newTodoList = await getTodos();
+      const newTodoList = await getToDoById(keycloak.tokenParsed.sub);
       setTodoList(newTodoList);
       sortTodoList(newTodoList);
     } catch (error) {
@@ -83,7 +84,7 @@ const Gjøremålsliste = () => {
         user: keycloak.tokenParsed.sub
 
       });
-      const newTodoList = await getTodos();
+      const newTodoList = await getToDoById(keycloak.tokenParsed.sub);
       setTodoList(newTodoList);
       sortTodoList(newTodoList);
     } catch (error) {
@@ -91,7 +92,7 @@ const Gjøremålsliste = () => {
       alert("Error adding/updating Todolist. Please try again.");
     }
   };
-
+  
   return (
     <div className="gjoremalsliste-container">
       <div className="input-container">
@@ -175,7 +176,7 @@ const Gjøremålsliste = () => {
               </h3>
               <p>Kategori: {todo.category}</p>
               <p>Tidsfrist: {countdown} igjen</p>
-              <div>
+              <div className="button-container">
                 <Button variant="outlined" color="primary" onClick={() => handleEdit(todo)}>
                   Rediger
                 </Button>
