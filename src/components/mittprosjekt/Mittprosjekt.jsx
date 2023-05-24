@@ -34,9 +34,9 @@ function Mittproject() {
 
   function getProgress(phase) {
     switch (phase) {
-      case 'analyse':
+      case 'Analyse':
         return 20;
-      case 'design':
+      case 'Design':
         return 40;
       case 'Implementering':
         return 60;
@@ -104,6 +104,7 @@ function Mittproject() {
         border: 'none',
         cursor: 'pointer',
       },
+      className: 'progress-bar'
     };
   }
 
@@ -112,7 +113,7 @@ function Mittproject() {
       case 'Analyse':
         return '#f44336';
       case 'Design':
-        return '#940b99';
+        return '#e466e8';
       case 'Implementering':
         return '#2196f3';
       case 'Testing':
@@ -184,6 +185,7 @@ function Mittproject() {
               <th>Dager igjen</th>
               <th>Rediger</th>
               <th>Slett</th>
+              <th>Medlemmer</th>
             </tr>
           </thead>
           <tbody>
@@ -218,6 +220,9 @@ function Mittproject() {
                 </td>
                 <td>
                   <Button onClick={() => handleDeleteProject(project.id)}>Slett</Button>
+                </td>
+                <td>
+                  <button>Se Medlemmer</button>
                 </td>
               </tr>
             ))}

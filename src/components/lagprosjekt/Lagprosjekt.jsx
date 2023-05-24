@@ -25,12 +25,12 @@ const Lagprosjekt = () => {
   useEffect(() => {
     getUsers();
     axios.get(`${apiUrlUsers}/${keycloak.tokenParsed.sub}`)
-    .then(response => {
-      setSelectedUsers((prevUsers) => [ response.data])
-    })
-    .catch(error => {
-      console.log(error)
-    })
+      .then(response => {
+        setSelectedUsers((prevUsers) => [response.data])
+      })
+      .catch(error => {
+        console.log(error)
+      })
   }, []);
 
   const getUsers = async () => {
@@ -58,7 +58,7 @@ const Lagprosjekt = () => {
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    console.log(name,value)
+    console.log(name, value)
     setProject((prevState) => ({
       ...prevState,
       [name]: value,
@@ -89,107 +89,117 @@ const Lagprosjekt = () => {
 
   return (
     <div className="input-card">
-      <h2>Lag nytt prosjekt:</h2>
+      <h3>Lag nytt prosjekt:</h3>
       <form onSubmit={handleSubmit}>
-        <label htmlFor="title">Tittel</label>
-        <input
-          type="text"
-          name="title"
-          value={project.title}
-          onChange={handleChange}
-          className="form-control"
-          required
-        />
+        <div className="input-form">
+          <div className="input-column">
+            <label htmlFor="title">Tittel</label>
+            <input
+              type="text"
+              name="title"
+              value={project.title}
+              onChange={handleChange}
+              className="form-control"
+              required
+            />
 
-        <label htmlFor="type">Type:</label>
-        <select
-          id="type"
-          name="type"
-          value={project.type}
-          onChange={handleChange}
-          className="form-control"
-        >
-          <option value="Jobb">Jobb</option>
-          <option value="Privat">Personlig</option>
-        </select>
+            <label htmlFor="type">Type:</label>
+            <select
+              id="type"
+              name="type"
+              value={project.type}
+              onChange={handleChange}
+              className="form-control"
+            >
+              <option value="Jobb">Jobb</option>
+              <option value="Privat">Personlig</option>
+            </select>
 
-        <label htmlFor="description">Beskrivelse</label>
-        <input
-          type="text"
-          name="description"
-          value={project.description}
-          onChange={handleChange}
-          required
-          className="form-control"
-        />
+            <label htmlFor="description">Beskrivelse</label>
+            <input
+              type="text"
+              name="description"
+              value={project.description}
+              onChange={handleChange}
+              required
+              className="form-control"
+            />
 
-        <label htmlFor="startDate">Startdato:</label>
-        <input
-          type="datetime-local"
-          name="startDate"
-          value={project.startDate}
-          onChange={handleChange}
-          className="form-control"
-        />
+            <label htmlFor="startDate">Startdato:</label>
+            <input
+              type="datetime-local"
+              name="startDate"
+              value={project.startDate}
+              onChange={handleChange}
+              className="form-control"
+            />
+          </div>
 
-        <label htmlFor="dueDate">Sluttdato:</label>
-        <input
-          type="datetime-local"
-          name="dueDate"
-          value={project.dueDate}
-          onChange={handleChange}
-          className="form-control"
-        />
+          <div className="input-column">
+            <label htmlFor="dueDate">Sluttdato:</label>
+            <input
+              type="datetime-local"
+              name="dueDate"
+              value={project.dueDate}
+              onChange={handleChange}
+              className="form-control"
+            />
 
-        <label htmlFor="phase">Fase:</label>
-        <select
-          id="phase"
-          name="phase"
-          value={project.phase}
-          onChange={handleChange}
-          className="form-control"
-          required
-        >
-          <option value="Analyse">Analyse</option>
-          <option value="Design">Design</option>
-          <option value="Implementering">Implementering</option>
-          <option value="Testing">Testing</option>
-          <option value="Vedlikehold">Vedlikehold</option>
-        </select>
+            <label htmlFor="phase">Fase:</label>
+            <select
+              id="phase"
+              name="phase"
+              value={project.phase}
+              onChange={handleChange}
+              className="form-control"
+              required
+            >
+              <option value="Analyse">Analyse</option>
+              <option value="Design">Design</option>
+              <option value="Implementering">Implementering</option>
+              <option value="Testing">Testing</option>
+              <option value="Vedlikehold">Vedlikehold</option>
+            </select>
 
-        <label htmlFor="userSearch">Søk etter bruker:</label>
-        <input
-          type="text"
-          name="userSearch"
-          value={searchQuery}
-          onChange={handleUserSearch}
-          className="form-control"
-        />
+            <label htmlFor="userSearch">Søk etter bruker:</label>
+            <input
+              type="text"
+              name="userSearch"
+              value={searchQuery}
+              onChange={handleUserSearch}
+              className="form-control"
+            />
 
-        <div className="user-list">
-          {filteredUsers.map((user) => (
-            <div key={user.id}>
-              {user.firstName} {user.lastName} - {user.email}
-              <button onClick={() => handleUserSelect(user)}>Add</button>
+            {searchQuery && (
+              <div className="user-list">
+                {filteredUsers.map((user) => (
+                  <div key={user.id}>
+                    {user.firstName} {user.lastName} - {user.email}
+                    <button onClick={() => handleUserSelect(user)}>Add</button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <div className="selected-users">
+              <h3>Valgt brukere:</h3>
+              {selectedUsers.map((user) => (
+                <div key={user.id}>
+                  {user.firstName} {user.lastName} - {user.email}
+                  <button onClick={() => handleUserRemove(user)}>Remove</button>
+                </div>
+              ))}
             </div>
-          ))}
+          </div>
         </div>
 
-        <div className="selected-users">
-          <h3>Valgt brukere:</h3>
-          {selectedUsers.map((user) => (
-            <div key={user.id}>
-              {user.firstName} {user.lastName} - {user.email}
-              <button onClick={() => handleUserRemove(user)}>Remove</button>
-            </div>
-          ))}
+        <div className="button-container">
+          <input
+            type="submit"
+            value="Lagre prosjekt"
+            className="form-control"
+          />
         </div>
-
-        <input
-          type="submit"
-          value="Lagre prosjekt"
-          className="form-control"
-        />
       </form>
     </div>
   );

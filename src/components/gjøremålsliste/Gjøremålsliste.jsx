@@ -19,7 +19,6 @@ const Gjøremålsliste = () => {
   useEffect(() => {
     const fetchData = async () => {
       const data = await getToDoById(keycloak.tokenParsed.sub);
-      console.log("DATA, " ,data)
       setTodoList(data);
       sortTodoList(data);
     };
@@ -40,12 +39,10 @@ const Gjøremålsliste = () => {
   };
 
   const handlePriorityChange = (event, value) => {
-    
     setTodos((prevState) => ({
       ...prevState,
       priorityLvl: value,
-      
-    }))
+    }));
     console.log(value);
   };
 
@@ -72,7 +69,7 @@ const Gjøremålsliste = () => {
         await updatetodos(todos.id, todos);
         alert("Todo list updated successfully!");
       } else {
-        console.log(todos)
+        console.log(todos);
         await addtodos(todos);
         alert("Todo list added successfully!");
       }
@@ -81,8 +78,7 @@ const Gjøremålsliste = () => {
         category: "",
         priorityLvl: 1,
         date: "",
-        user: keycloak.tokenParsed.sub
-
+        user: keycloak.tokenParsed.sub,
       });
       const newTodoList = await getToDoById(keycloak.tokenParsed.sub);
       setTodoList(newTodoList);
@@ -161,32 +157,36 @@ const Gjøremålsliste = () => {
       </div>
 
       <div className="todo-container">
-        {sortedTodoList.map((todo) => {
-          const dueDate = new Date(todo.date);
-          const now = new Date();
-          const diffMs = dueDate - now;
-          const diffDays = Math.floor(diffMs / 86400000);
-          const diffHrs = Math.floor((diffMs % 86400000) / 3600000);
-          const diffMins = Math.floor(((diffMs % 86400000) % 3600000) / 60000);
-          const countdown = `${diffDays}d ${diffHrs}h ${diffMins}m`;
-          return (
-            <div className={`todo ${todo.category.toLowerCase()}`} key={todo.id}>
-              <h3>
-                {todo.title} {todo.priorityLvl === 2 ? "!" : ""}
-              </h3>
-              <p>Kategori: {todo.category}</p>
-              <p>Tidsfrist: {countdown} igjen</p>
-              <div>
-                <Button variant="outlined" color="primary" onClick={() => handleEdit(todo)}>
-                  Rediger
-                </Button>
-                <Button variant="outlined" color="secondary" onClick={() => handleDelete(todo.id)}>
-                  Slett
-                </Button>
+        {sortedTodoList.length === 0 ? (
+          <div className="empty-message">Du har ingen gjøremål</div>
+        ) : (
+          sortedTodoList.map((todo) => {
+            const dueDate = new Date(todo.date);
+            const now = new Date();
+            const diffMs = dueDate - now;
+            const diffDays = Math.floor(diffMs / 86400000);
+            const diffHrs = Math.floor((diffMs % 86400000) / 3600000);
+            const diffMins = Math.floor(((diffMs % 86400000) % 3600000) / 60000);
+            const countdown = `${diffDays}d ${diffHrs}h ${diffMins}m`;
+            return (
+              <div className={`todo ${todo.category.toLowerCase()}`} key={todo.id}>
+                <h3>
+                  {todo.title} {todo.priorityLvl === 2 ? "!" : ""}
+                </h3>
+                <p>Kategori: {todo.category}</p>
+                <p>Tidsfrist: {countdown} igjen</p>
+                <div className="button-container">
+                  <Button variant="outlined" color="primary" onClick={() => handleEdit(todo)}>
+                    Rediger
+                  </Button>
+                  <Button variant="outlined" color="secondary" onClick={() => handleDelete(todo.id)}>
+                    Slett
+                  </Button>
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })
+        )}
       </div>
     </div>
   );

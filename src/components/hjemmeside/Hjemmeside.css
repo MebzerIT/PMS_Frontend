@@ -1,0 +1,43 @@
+.not-logged-in-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    background-color: #f2f2f2;
+  }
+  
+  .not-logged-in-image .image-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    margin-bottom: 20px;
+  }
+  
+  .not-logged-in-image .image-container img:first-child {
+    margin-bottom: 30px;
+  }
+  
+  .not-logged-in-image .image-container img {
+    max-width: 48%;
+    height: auto;
+    margin-right: -190px;
+    margin-left: -70px;
+    border: 1px solid black;
+    border-radius: 8px;
+  }
+  
+  .not-logged-in-image h3 {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  .not-logged-in-image p {
+    font-size: 16px;
+    text-align: center;
+    color: #666;
+  }
+  
