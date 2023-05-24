@@ -17,16 +17,16 @@ function ChatNav() {
       case 'notifications':
         return <Notifications />;
       case 'chat':
-        return <Chat />;
+        return <Chat/>;
       case 'groups':
-        return <Groups />;
+        return <Groups/>;
       default:
         return <Chat />;
     }
   }
 
   return (
-    <div class="chat-container">
+    <div className="chat-container">
       <div className="chat-nav">
         <ul id="chat-Nav-list">
           <li onClick={() => setSelectedComponent('notifications')}><IoIosNotifications /></li>
