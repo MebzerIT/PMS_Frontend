@@ -4,6 +4,7 @@ import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { Button } from '@mui/material';
 import RedigerProsjekt from '../rediger/RedigerProsjekt';
+import Medlemmer from '../medlemmer/Medlemmer';
 import { getProjects, updateProject, deleteProject } from '../../api/project';
 import { getUser } from '../../api/user';
 import withAuth from '../../hoc/withAuth';
@@ -14,6 +15,8 @@ function Mittproject() {
   const [projects, setProjects] = useState([]);
   const [selectedProject, setSelectedProject] = useState(null);
   const [user, setUser] = useState(null);
+  const [projectMembers, setProjectMembers] = useState([]);
+  const [viewMembers, setViewMembers] = useState(false); // New state variable
 
   useEffect(() => {
     async function fetchData() {
@@ -21,9 +24,6 @@ function Mittproject() {
       setUser(userData);
 
       if (userData) {
-        console.log("LOOK HERE")
-        console.log(userData)
-        console.log(userData.id)
         const userProjects = await getProjects(userData.id);
         setProjects(userProjects);
       }
@@ -104,7 +104,7 @@ function Mittproject() {
         border: 'none',
         cursor: 'pointer',
       },
-      className: 'progress-bar'
+      className: 'progress-bar',
     };
   }
 
@@ -127,8 +127,7 @@ function Mittproject() {
 
   function handleSaveProject(updatedProject) {
     const projectId = parseInt(updatedProject.id);
-    console.log("HERE")
-    console.log(updatedProject)
+
     updateProject(projectId, updatedProject)
       .then((response) => {
         console.log('Project updated successfully');
@@ -143,6 +142,18 @@ function Mittproject() {
 
   function handleEditProject(project) {
     setSelectedProject(project);
+    setViewMembers(false); // Reset viewMembers state
+  }
+
+  async function handleViewMembers(project) {
+    setSelectedProject(project);
+
+    const response = await fetch('http://localhost:8080/api/v1/users');
+    const users = await response.json();
+
+    const members = users.filter((user) => user.projects.includes(project.id));
+    setProjectMembers(members);
+    setViewMembers(true); // Update viewMembers state
   }
 
   function handleDeleteProject(projectId) {
@@ -216,26 +227,57 @@ function Mittproject() {
                 </td>
                 <td>{daysRemaining(project.dueDate)}</td>
                 <td>
-                  <button onClick={() => handleEditProject(project)}>Rediger</button>
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    size="small"
+                    onClick={() => handleEditProject(project)}
+                  >
+                    Rediger
+                  </Button>
                 </td>
                 <td>
-                  <Button onClick={() => handleDeleteProject(project.id)}>Slett</Button>
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    size="small"
+                    onClick={() => handleDeleteProject(project.id)}
+                  >
+                    Slett
+                  </Button>
                 </td>
                 <td>
-                  <button>Se Medlemmer</button>
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    size="small"
+                    onClick={() => handleViewMembers(project)}
+                  >
+                    Se Medlemmer
+                  </Button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-
-      {selectedProject && (
+      {selectedProject && !viewMembers && (
         <RedigerProsjekt
           project={selectedProject}
-          onSave={handleSaveProject}
-          onClose={() => setSelectedProject(null)}
+          onSaveProject={handleSaveProject}
+          onCancel={() => setSelectedProject(null)}
         />
+      )}
+      {selectedProject && viewMembers && (
+        <Medlemmer
+        projectMembers={projectMembers} 
+        selectedProject={selectedProject}
+        onCancel={() => {
+          setSelectedProject(null);
+          setViewMembers(false);
+        }}
+      />
+      
       )}
     </div>
   );

@@ -3,7 +3,7 @@ import { Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/
 import withAuth from '../../hoc/withAuth';
 import './RedigerProsjekt.css';
 
-function RedigerProsjekt({ project, onSave, onClose }) {
+function RedigerProsjekt({ project, onSaveProject, onCancel }) {
   const [editedProject, setEditedProject] = useState(project);
 
   const handleFieldChange = (field, value) => {
@@ -19,11 +19,11 @@ function RedigerProsjekt({ project, onSave, onClose }) {
       return;
     }
 
-    onSave(editedProject);
+    onSaveProject(editedProject);
   };
 
   return (
-    <Dialog open={true} onClose={onClose}>
+    <Dialog open={true} onClose={onCancel}>
       <DialogTitle>Rediger Prosjekt</DialogTitle>
       <DialogContent>
         <label htmlFor="editTitle">Tittel</label>
@@ -36,6 +36,7 @@ function RedigerProsjekt({ project, onSave, onClose }) {
           required
         />
 
+        {/* Remaining input fields */}
         <label htmlFor="editType">Type:</label>
         <select
           id="editType"
@@ -90,9 +91,9 @@ function RedigerProsjekt({ project, onSave, onClose }) {
         </select>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose}>Avbryt</Button>
+        <Button onClick={onCancel}>Avbryt</Button>
         <Button onClick={handleSaveProject} color="primary">
-          Lagre
+          Oppdater
         </Button>
       </DialogActions>
     </Dialog>
@@ -100,3 +101,4 @@ function RedigerProsjekt({ project, onSave, onClose }) {
 }
 
 export default withAuth(RedigerProsjekt);
+

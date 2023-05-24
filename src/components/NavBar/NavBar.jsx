@@ -68,17 +68,6 @@ const NavBar = () => {
 
       {keycloak.authenticated && (
         <div className="navbar__item">
-          <NavLink className="tekst" to="/Medlemmer">
-            <ListItemIcon>
-              <SearchIcon />
-              Medlemmer
-            </ListItemIcon>
-          </NavLink>
-        </div>
-      )}
-
-      {keycloak.authenticated && (
-        <div className="navbar__item">
           <NavLink className="tekst" to="/Chat">
             <ListItemIcon>
               <ForumIcon />

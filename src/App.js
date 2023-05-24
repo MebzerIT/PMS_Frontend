@@ -7,7 +7,7 @@ import ProfilView from './Views/ProfilView';
 import LagprosjektView from './Views/LagprosjektView';
 import MittprosjektView from './Views/MittprosjektView';
 import ChatView from './Views/ChatView';
-import MedlemmerView from './Views/MedlemmerView';
+
 function App() {
   return (
     <BrowserRouter>
@@ -18,7 +18,6 @@ function App() {
               <Route path="/Gjøremålsliste" element={ <GjøremålslisteView />}/>
               <Route path="/MittProsjekt" element={ <MittprosjektView />}/>
               <Route path="/Chat" element={ <ChatView />}/>
-              <Route path="/Medlemmer" element={ <MedlemmerView/>}/>
               <Route path="/Lagprosjekt" element={ <LagprosjektView />}/>
               <Route path="/Profil" element={ <ProfilView />}/>
             </Routes> }
