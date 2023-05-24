@@ -19,7 +19,6 @@ const Gjøremålsliste = () => {
   useEffect(() => {
     const fetchData = async () => {
       const data = await getToDoById(keycloak.tokenParsed.sub);
-      console.log("DATA: ", data);
       setTodoList(data);
       sortTodoList(data);
     };
