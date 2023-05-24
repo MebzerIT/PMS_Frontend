@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import withAuth from '../../hoc/withAuth';
+import './RedigerProsjekt.css';
 
 function RedigerProsjekt({ project, onSave, onClose }) {
   const [editedProject, setEditedProject] = useState(project);

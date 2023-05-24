@@ -5,21 +5,27 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import RedigerProsjekt from '../rediger/RedigerProsjekt';
 import { getProjects, updateProject, deleteProject } from '../../api/project';
 import { getUser } from '../../api/user';
-import withAuth from '../../hoc/withAuth';
+import keycloak from '../keycloak/keycloak';
+import "./Hjemmeside.css";
 
 function Hjemmeside() {
   const [projects, setProjects] = useState([]);
   const [selectedProject, setSelectedProject] = useState(null);
   const [user, setUser] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Track user's authentication status
 
   useEffect(() => {
     async function fetchData() {
-      const userData = await getUser();
-      setUser(userData);
+      if (keycloak.authenticated) {
+        setIsLoggedIn(true); // Set isLoggedIn to true if the user is authenticated
 
-      if (userData) {
-        const userProjects = await getProjects(userData.id);
-        setProjects(userProjects);
+        const userData = await getUser(keycloak.tokenParsed.sub);
+        setUser(userData);
+
+        if (userData) {
+          const userProjects = await getProjects(userData.id);
+          setProjects(userProjects);
+        }
       }
     }
 
@@ -149,6 +155,21 @@ function Hjemmeside() {
       });
   }
 
+  if (!isLoggedIn) {
+    return (
+      <div className="not-logged-in-image">
+        <div>
+          <h3>Samle alle oppgavene dine, gjøremålslister, lagkamerater og verktøy</h3>
+          <p>Hold alt på samme sted – selv om teamet ditt ikke er det.</p>
+        </div>
+        <div className="image-container">
+          <img src={process.env.PUBLIC_URL + '/images/gjoremal.png'} alt="Gjøremål" />
+          <img src={process.env.PUBLIC_URL + '/images/calendar.png'} alt="Calendar" style={{ marginbottom: '500px' }} />
+        </div>
+      </div>
+    );    
+  }
+
   return (
     <div className="mittprosjekt-container">
       <div className="mittprosjekt-header">
@@ -176,4 +197,4 @@ function Hjemmeside() {
   );
 }
 
-export default withAuth(Hjemmeside);
+export default Hjemmeside;
