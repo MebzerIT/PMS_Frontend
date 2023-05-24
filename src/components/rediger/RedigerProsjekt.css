@@ -1,0 +1,84 @@
+.form-control {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-bottom: 16px;
+  }
+  
+  .date-control {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-bottom: 16px;
+  }
+  
+  .DialogTitle {
+    padding: 16px 24px;
+  }
+  
+  .DialogContent {
+    padding: 16px 24px;
+  }
+  
+  .DialogActions {
+    padding: 8px 24px 16px;
+    justify-content: flex-end;
+  }
+  
+  .DialogActions button {
+    margin-left: 8px;
+  }
+  
+  label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+  
+  select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-bottom: 16px;
+  }
+  
+  button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    background-color: #2196f3;
+    color: #fff;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #0d8cf0;
+  }
+  
+  button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  button.primary {
+    background-color: #4caf50;
+  }
+  
+  button.primary:hover {
+    background-color: #449d48;
+  }
+  
+  button.secondary {
+    background-color: #f44336;
+  }
+  
+  button.secondary:hover {
+    background-color: #d53a2f;
+  }
+  

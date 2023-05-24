@@ -127,3 +127,7 @@ display: flex;
 gap: 260px;
 margin-top: 10px;
 }
+
+.empty-message {
+  margin-top: 15em;
+}
