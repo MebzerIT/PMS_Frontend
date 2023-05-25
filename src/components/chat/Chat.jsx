@@ -2,7 +2,7 @@ import withAuth from "../../hoc/withAuth";
 import React, { useEffect, useState } from "react";
 import SockJS from "sockjs-client";
 import { Client } from '@stomp/stompjs';
-import keycloak, { initialize } from '../keycloak/keycloak';
+import keycloak from '../keycloak/keycloak';
 import "./chat.css";
 
 const Chat = () => {
@@ -16,11 +16,25 @@ const Chat = () => {
     const [filteredUsers, setFilteredUsers] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedUser, setSelectedUser] = useState(null);
+    const [loggedinUser, setLoggedinUser] = useState(null);
 
-
-    const loggedinUser = keycloak.tokenParsed;
+    useEffect(() => {
+        if (keycloak) {
+            keycloak.updateToken(30)
+              .then(() => {
+                if (keycloak.token) {
+                  setLoggedinUser(keycloak.tokenParsed);
+                }
+              })
+              .catch(() => {
+                keycloak.login();
+              });
+          }
+        }, [keycloak]); 
 
     console.log("i am user",loggedinUser);
+    
+    console.log("messages",messages);
 
     const [users, setUsers] = useState([]);
     
@@ -66,7 +80,6 @@ const Chat = () => {
     console.log("selectedUser",selectedUser)
 
     useEffect(() => {
-        initialize();
         connect();
     }, []);
 
@@ -82,7 +95,7 @@ const Chat = () => {
         
         localStompClient.onConnect = () => {
             console.log("Connected");
-            localStompClient.subscribe("/topic/public", onMessageReceived);
+            localStompClient.subscribe(`/user/${loggedinUser.name}/queue/messages`, onMessageReceived);
         };
         
         localStompClient.onStompError = onError;
@@ -111,9 +124,13 @@ const Chat = () => {
     const onMessageReceived = (payload) => {
         const message = JSON.parse(payload.body);
         if(message.from && message.text){
-            setMessages([...messages, { sender: message.from, content: message.text}]);
+            setMessages(prevMessages => [...prevMessages, { sender: message.from, content: message.text }]);
           }
           console.log("Received message: ", message);
+          console.log("Received payload:", payload);
+          console.log("Parsed message:", message);
+          
+
         // handle received message
     };
    
