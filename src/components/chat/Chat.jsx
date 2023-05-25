@@ -2,6 +2,7 @@ import withAuth from "../../hoc/withAuth";
 import React, { useEffect, useState } from "react";
 import SockJS from "sockjs-client";
 import { Client } from '@stomp/stompjs';
+import keycloak, { initialize } from '../keycloak/keycloak';
 import "./chat.css";
 
 const Chat = () => {
@@ -12,9 +13,60 @@ const Chat = () => {
     const [messages, setMessages] = useState([]);
     const [content, setContent] = useState(''); 
 
+    const [filteredUsers, setFilteredUsers] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
+    const [selectedUser, setSelectedUser] = useState(null);
+
+
+    const loggedinUser = keycloak.tokenParsed;
+
+    console.log("i am user",loggedinUser);
+
+    const [users, setUsers] = useState([]);
+    
+    useEffect(() => {
+        // Fetch users from API and update the users state
+        const fetchUsers = async () => {
+            try {
+                const response = await fetch("http://localhost:8080/api/v1/users");
+                const data = await response.json();
+                setUsers(data);
+            } catch (error) {
+                console.error("Error fetching users:", error);
+            }
+        };
+
+        fetchUsers();
+    }, []);
+    console.log("users data: ",users)
+
+    const handleSearch = () => {
+        const filtered = users.filter(user =>
+            (user.firstName && user.firstName.toLowerCase().includes(searchTerm.toLowerCase())) ||
+            (user.lastName && user.lastName.toLowerCase().includes(searchTerm.toLowerCase()))
+          );
+        setFilteredUsers(filtered);
+        console.log("Filtered: ",filtered)
+     }
+    
+    useEffect(() => {
+        // Filter the users based on the search term
+        handleSearch();
+    }, [searchTerm, users]);
+
+
+    const handleSearchInput = event => {
+        setSearchTerm(event.target.value);
+    };
+
+    const handleUserSelection = user => {
+        setSelectedUser(user);
+    };
+    
+    console.log("selectedUser",selectedUser)
 
     useEffect(() => {
+        initialize();
         connect();
     }, []);
 
@@ -45,11 +97,11 @@ const Chat = () => {
         console.log("Could not connect. " + error);
     };
     
-    const addUser = (username) => {
+    const addUser = () => {
         if (stompClient) {
             stompClient.publish({ 
                 destination: '/app/chat.addUser', 
-                body: JSON.stringify({ sender: username, type: 'JOIN' }) 
+                body: JSON.stringify({ sender: loggedinUser.name, type: 'JOIN' }) 
             });
         } else {
             console.error('The Stomp client is not connected.');
@@ -64,33 +116,21 @@ const Chat = () => {
           console.log("Received message: ", message);
         // handle received message
     };
-
+   
     const handleInput = (event) => {
         setContent(event.target.value); // Update the state with the current input value
       };
 
     const sendMessage = (msg) => {
-        if (stompClient) {
-            stompClient.publish({ destination: '/app/chat.sendMessage', body: JSON.stringify({ from: 'test', text: msg }) });
-            setMessages([...messages, { sender: 'test2', content: msg}]);
+        if (stompClient && selectedUser) {
+            stompClient.publish({ destination: `/app/chat.sendMessage/${selectedUser.id}`, body: JSON.stringify({ from: loggedinUser.name , text: msg }) });
+            setMessages([...messages, { sender: loggedinUser.name , content: msg}]);
             setContent('');
         } else {
             console.error('The Stomp client is not connected.');
         }
     }
-
-    const handleSearchInput = (event) => {
-        setSearchTerm(event.target.value);
-      }
-      
-     const handleSearch = () => {
-        // The search functionality will go here
-        // You could filter your users list based on the search term
-       // const filteredUsers = users.filter(user => user.name.includes(searchTerm));
-      
-        // You can now use 'filteredUsers' for your user list
-     }
-
+    
     return (
 
         <div className="chat-container">
@@ -105,21 +145,25 @@ const Chat = () => {
             <div className="live-chat">
 
                 <h2>Live Chat</h2>
-
-                <div className="userSearchBtn">
-                    <input type="text" id="search-input" placeholder="Search users..." onChange={handleSearchInput} />
-                    <button onClick={handleSearch}>Search</button>
-                </div> 
-                {/* <div>
-                    {filteredUsers.map(user => (
-                        <p key={user.id}>{user.name}</p>
-                    ))}
-                </div> */}
-
+                <div id="search-display">
+                    <div className="userSearchBtn">
+                        <input type="text" id="search-input" placeholder="Search users..." onChange={handleSearchInput} />
+                        <button onClick={handleSearch}>Search</button>
+                    </div> 
+                    {searchTerm && !selectedUser && (
+                        <div>
+                            {filteredUsers.map(user => (
+                                <p key={user.id} onClick={() => handleUserSelection(user)}>
+                                    {user.firstName}
+                                </p>
+                            ))}
+                        </div>
+                    )}
+               </div>
                 <div id="live-chat-display">
-                {messages.map((msg, index) => (
-                    <p key={index}>{msg.sender}: {msg.content}</p>
-                ))}
+                    {messages.map((msg, index) => (
+                        <p key={index}>{msg.sender}: {msg.content}</p>
+                    ))}
                 </div>
 
                 <div className="message-input">
