@@ -3,7 +3,7 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    height: 100vh;
+    height: 130vh;
     background-color: #f2f2f2;
   }
   
@@ -21,8 +21,8 @@
   .not-logged-in-image .image-container img {
     max-width: 48%;
     height: auto;
-    margin-right: -190px;
-    margin-left: -70px;
+    margin-right: -360px;
+    margin-left: -370px;
     border: 1px solid black;
     border-radius: 8px;
   }
