@@ -1,8 +1,8 @@
-import Chat from "../components/chat/Chat";
+import ChatNav from "../components/chat/ChatNav";
 
 const ChatView = () => (
     <>
-    <Chat/>
+    <ChatNav/>
     </>
 )
 export default ChatView;

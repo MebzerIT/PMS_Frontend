@@ -34,7 +34,7 @@ function Hjemmeside() {
     title: project.title,
     start: project.startDate,
     end: project.dueDate,
-    phase: project.phase, // Add phase property to event object
+    phase: project.phase, 
   }));
 
   const getPhaseColor = (phase) => {
