@@ -16,25 +16,11 @@ const Chat = () => {
     const [filteredUsers, setFilteredUsers] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedUser, setSelectedUser] = useState(null);
-    const [loggedinUser, setLoggedinUser] = useState(null);
+    
 
-    useEffect(() => {
-        if (keycloak) {
-            keycloak.updateToken(30)
-              .then(() => {
-                if (keycloak.token) {
-                  setLoggedinUser(keycloak.tokenParsed);
-                }
-              })
-              .catch(() => {
-                keycloak.login();
-              });
-          }
-        }, [keycloak]); 
+    const loggedinUser = keycloak.tokenParsed;
 
     console.log("i am user",loggedinUser);
-    
-    console.log("messages",messages);
 
     const [users, setUsers] = useState([]);
     
@@ -75,17 +61,14 @@ const Chat = () => {
 
     const handleUserSelection = user => {
         setSelectedUser(user);
+        console.log("handlselection", user)
     };
     
     console.log("selectedUser",selectedUser)
 
-    useEffect(() => {
-        connect();
-    }, []);
-
-    
     const connect = () => {
         const socket = new SockJS("http://localhost:8080/websocket-app");
+        console.log("****",socket)
         const localStompClient = new Client({
             webSocketFactory: () => socket,  // use the SockJS object
             debug: (str) => {
@@ -93,11 +76,14 @@ const Chat = () => {
             },
         });
         
-        localStompClient.onConnect = () => {
+        /* localStompClient.onConnect = () => {
             console.log("Connected");
-            localStompClient.subscribe(`/user/${loggedinUser.name}/queue/messages`, onMessageReceived);
-        };
-        
+            localStompClient.subscribe("/queue/reply", (payload) => {
+                console.log("Received payload:", payload);
+                onMessageReceived(payload)
+            });
+        }; */
+        console.log("localstomecliant**",localStompClient )
         localStompClient.onStompError = onError;
         localStompClient.activate();
         setStompClient(localStompClient);
@@ -110,6 +96,26 @@ const Chat = () => {
         console.log("Could not connect. " + error);
     };
     
+    useEffect(() => {
+        if(!stompClient)
+            {connect();}        
+    }, [connect,stompClient]);
+
+    useEffect(()=>{
+        if(stompClient){
+            stompClient.onConnect = () => {
+                console.log("###Connected");
+                const userId = selectedUser.id;
+                stompClient.subscribe(`/user/topic/reply/${userId}`, (payload) => {
+                    console.log("Received payload:", payload);
+                    onMessageReceived(payload)
+                });
+            };
+        }
+    }
+
+)
+
     const addUser = () => {
         if (stompClient) {
             stompClient.publish({ 
@@ -123,14 +129,11 @@ const Chat = () => {
 
     const onMessageReceived = (payload) => {
         const message = JSON.parse(payload.body);
+        console.log("payload", payload)
         if(message.from && message.text){
-            setMessages(prevMessages => [...prevMessages, { sender: message.from, content: message.text }]);
+            setMessages([...messages, { sender: message.from, content: message.text}]);
           }
           console.log("Received message: ", message);
-          console.log("Received payload:", payload);
-          console.log("Parsed message:", message);
-          
-
         // handle received message
     };
    
@@ -139,7 +142,9 @@ const Chat = () => {
       };
 
     const sendMessage = (msg) => {
+        console.log("log stomand selectedUser",stompClient, selectedUser )
         if (stompClient && selectedUser) {
+            console.log("**test")
             stompClient.publish({ destination: `/app/chat.sendMessage/${selectedUser.id}`, body: JSON.stringify({ from: loggedinUser.name , text: msg }) });
             setMessages([...messages, { sender: loggedinUser.name , content: msg}]);
             setContent('');
