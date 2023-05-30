@@ -66,15 +66,57 @@ const Chat = () => {
     
     console.log("selectedUser",selectedUser)
 
+    const onMessageReceived = (payload) => {
+        const message = JSON.parse(payload.body);
+        console.log("payload", payload)
+        if(message.from && message.text){
+            setMessages([...messages, { sender: message.from, content: message.text}]);
+          }
+          console.log("Received message: ", message);
+        // handle received message
+    };
+
     const connect = () => {
         const socket = new SockJS("http://localhost:8080/websocket-app");
-        console.log("****",socket)
+
         const localStompClient = new Client({
-            webSocketFactory: () => socket,  // use the SockJS object
+            webSocketFactory: () => {
+                return socket;
+            },
             debug: (str) => {
                 console.log(str);
             },
+            onConnect: () => {
+                console.log('Connected');
+            },
+            onStompError: (error) => {
+                console.error("STOMP error " + error);
+            },
         });
+
+console.log("localStompClient",localStompClient);
+
+localStompClient.activate();
+
+setStompClient(localStompClient);
+
+        localStompClient.onConnect = () => {
+            console.log("Connected");
+            if (selectedUser !== null) {
+                const userId = selectedUser.id;
+                console.log("**userId**",userId);
+                localStompClient.subscribe(`/user/${userId}/queue/reply`, (payload) => {
+                    console.log("Received payload:", payload);
+                    onMessageReceived(payload);
+                });
+            } else {
+                console.log("No user selected, unable to setup STOMP subscription");
+            }
+        };
+        console.log("localstomecliant**",localStompClient )
+        localStompClient.onStompError = onError;
+        localStompClient.activate();
+        setStompClient(localStompClient);
         
         /* localStompClient.onConnect = () => {
             console.log("Connected");
@@ -83,11 +125,8 @@ const Chat = () => {
                 onMessageReceived(payload)
             });
         }; */
-        console.log("localstomecliant**",localStompClient )
-        localStompClient.onStompError = onError;
-        localStompClient.activate();
-        setStompClient(localStompClient);
     };
+
     const onConnected = () => {
         console.log('onConnected function called');
     };
@@ -95,17 +134,19 @@ const Chat = () => {
     const onError = (error) => {
         console.log("Could not connect. " + error);
     };
+
     
     useEffect(() => {
         if(!stompClient)
             {connect();}        
     }, [connect,stompClient]);
-
+/* 
     useEffect(()=>{
         if(stompClient){
             stompClient.onConnect = () => {
                 console.log("###Connected");
                 const userId = selectedUser.id;
+                console.log("**userId**",userId);
                 stompClient.subscribe(`/user/topic/reply/${userId}`, (payload) => {
                     console.log("Received payload:", payload);
                     onMessageReceived(payload)
@@ -115,7 +156,7 @@ const Chat = () => {
     }
 
 )
-
+ */
     const addUser = () => {
         if (stompClient) {
             stompClient.publish({ 
@@ -127,16 +168,7 @@ const Chat = () => {
         }
     };
 
-    const onMessageReceived = (payload) => {
-        const message = JSON.parse(payload.body);
-        console.log("payload", payload)
-        if(message.from && message.text){
-            setMessages([...messages, { sender: message.from, content: message.text}]);
-          }
-          console.log("Received message: ", message);
-        // handle received message
-    };
-   
+
     const handleInput = (event) => {
         setContent(event.target.value); // Update the state with the current input value
       };
